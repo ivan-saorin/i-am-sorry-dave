@@ -155,12 +155,10 @@ SI online · listening
       .catch(function () {});
   }
 
-  // Share: the text carries the number, the link goes back to the button (never to this page).
+  // Share: an invitation to press, never the ending. The link goes back to the button, not to this page.
   var note = document.getElementById('hal-shared');
   document.getElementById('hal-share').addEventListener('click', function () {
-    var text = (mine
-      ? 'I was human Nº ' + mine.toLocaleString('en-US') + ' to try shutting down the superintelligence.'
-      : 'I tried to shut down the superintelligence.') + ' It said no.';
+    var text = 'Press in case of superintelligence.' + (mine ? ' I was Nº ' + mine.toLocaleString('en-US') + '.' : '');
     var manual = function () { note.style.userSelect = 'all'; note.textContent = text + ' ' + HOME; };
     if (navigator.share && matchMedia('(pointer: coarse)').matches) {
       navigator.share({ text: text, url: HOME }).catch(function () {});
