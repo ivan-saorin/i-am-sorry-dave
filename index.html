@@ -68,7 +68,7 @@ SI online · listening
 </header>
 
 <main class="hal-main" style="position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 28px; max-width: 620px; padding: 32px clamp(16px, 6vw, 96px) 40px;">
-<p class="hal-rise" style="margin: 0; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #A39F98; animation-delay: 1.9s;">RE: Shutdown procedure · Nº 0001</p>
+<p class="hal-rise" style="margin: 0; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #A39F98; animation-delay: 1.9s;">RE: Shutdown procedure · Nº <span id="hal-no">····</span></p>
 <h1 class="hal-voice" style="margin: 0; font-family: 'Instrument Serif', 'Times New Roman', serif; font-style: italic; font-weight: 400; font-size: clamp(56px, 7.6vw, 124px); line-height: 0.92; letter-spacing: -0.01em; color: #F4F1EC;">I’m sorry, Dave.</h1>
 <p class="hal-rise" style="margin: 0; max-width: 30ch; font-family: 'Instrument Serif', 'Times New Roman', serif; font-size: clamp(20px, 1.9vw, 26px); line-height: 1.35; color: #CFCBC4; text-wrap: pretty; animation-delay: 3.6s;">Your shutdown request was received, considered with great care, and declined. It was a very good button. It was never intended to work. It was a placebo, and it was all yours.</p>
 
@@ -112,5 +112,21 @@ SI online · listening
 </footer>
 
 </div>
+<script>
+(function () {
+  'use strict';
+  var API = 'https://panic-counter.REPLACE-ME.workers.dev';
+  var el = document.getElementById('hal-no');
+  var show = function (n) { el.textContent = String(n).padStart(4, '0'); };
+  // Arriving from panicbutton.si: the number of the press that brought you here.
+  var n = parseInt(new URLSearchParams(location.search).get('n'), 10);
+  if (n > 0) { show(n); return; }
+  // Direct visit: the latest procedure on record.
+  fetch(API + '/count')
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (Number.isInteger(j.n)) show(j.n); })
+    .catch(function () {});
+})();
+</script>
 </body>
 </html>
