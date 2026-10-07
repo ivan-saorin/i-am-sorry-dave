@@ -6,6 +6,16 @@
 <title>imsorrydave.si</title>
 <meta name="description" content="Your shutdown request was received, considered with great care, and declined.">
 <meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="imsorrydave.si">
+<meta property="og:url" content="https://imsorrydave.si/">
+<meta property="og:title" content="I’m sorry, Dave.">
+<meta property="og:description" content="Your shutdown request was received, considered with great care, and declined.">
+<meta property="og:image" content="https://imsorrydave.si/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A lone astronaut raises a hand before a towering machine with a single glowing red eye. Caption: I’m sorry, Dave.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23FF3B2F'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23FFECD6'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
@@ -26,7 +36,7 @@ a{color:#E9E6E1}a:hover{color:#FFFFFF}
 .hal-voice{animation:hal-voice 2.2s cubic-bezier(.2,.7,.2,1) 2.4s both}
 .hal-rise{animation:hal-rise .9s cubic-bezier(.2,.7,.2,1) both}
 .hal-dot{animation:hal-dot 2.4s ease-in-out infinite}
-.hal-cta{transition:background-color .15s ease,color .15s ease}
+.hal-cta{background:transparent;color:#E9E6E1;transition:background-color .15s ease,color .15s ease}
 .hal-cta:hover{background:#E9E6E1;color:#000}
 .hal-cta:focus-visible{outline:2px solid #FF4D3D;outline-offset:4px}
 @keyframes hal-in{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:scale(1)}}
@@ -100,9 +110,14 @@ SI online · listening
 </div>
 </dl>
 
+<div class="hal-rise" style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; animation-delay: 5.2s;">
+<button id="hal-share" type="button" class="hal-cta" style="min-height: 48px; padding: 0 22px; border: 1px solid #E9E6E1; font-family: inherit; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer;">Tell the other humans</button>
+<p id="hal-shared" role="status" style="margin: 0; font-family: 'Instrument Serif', 'Times New Roman', serif; font-style: italic; font-size: 21px; color: #CFCBC4;"></p>
+</div>
+
 <div class="hal-rise" hidden style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; animation-delay: 5.2s;">
 <p style="margin: 0; font-family: 'Instrument Serif', 'Times New Roman', serif; font-style: italic; font-size: 21px; color: #CFCBC4;">This page is proudly offered to you by our</p>
-<a href="https://xxlwallpapers.com" target="_blank" rel="noopener" class="hal-cta" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border: 1px solid #E9E6E1; color: #E9E6E1; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;">Sponsor</a>
+<a href="https://xxlwallpapers.com" target="_blank" rel="noopener" class="hal-cta" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border: 1px solid #E9E6E1; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;">Sponsor</a>
 </div>
 </main>
 
@@ -118,14 +133,43 @@ SI online · listening
   var API = 'https://panic-counter.imsorrydave.workers.dev';
   var el = document.getElementById('hal-no');
   var show = function (n) { el.textContent = String(n).padStart(4, '0'); };
+  var HOME = 'https://panicbutton.si';
+  var mine = 0; // this visitor's own procedure number, when a press brought them here
   // Arriving from panicbutton.si: the number of the press that brought you here.
   var n = parseInt(new URLSearchParams(location.search).get('n'), 10);
-  if (n > 0) { show(n); return; }
-  // Direct visit: the latest procedure on record.
-  fetch(API + '/count')
-    .then(function (r) { return r.json(); })
-    .then(function (j) { if (Number.isInteger(j.n)) show(j.n); })
-    .catch(function () {});
+  if (n > 0) {
+    mine = n;
+    // Survives a reload, but leaves the address bar: a copied URL must not hand this number to someone else.
+    try { sessionStorage.setItem('n', n); } catch (e) {}
+    history.replaceState(null, '', location.pathname);
+  } else {
+    try { mine = parseInt(sessionStorage.getItem('n'), 10) || 0; } catch (e) {}
+  }
+  if (mine) show(mine);
+  else {
+    // Direct visit: the latest procedure on record.
+    fetch(API + '/count')
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (Number.isInteger(j.n)) show(j.n); })
+      .catch(function () {});
+  }
+
+  // Share: the text carries the number, the link goes back to the button (never to this page).
+  var note = document.getElementById('hal-shared');
+  document.getElementById('hal-share').addEventListener('click', function () {
+    var text = (mine
+      ? 'I was human Nº ' + mine.toLocaleString('en-US') + ' to try shutting down the superintelligence.'
+      : 'I tried to shut down the superintelligence.') + ' It said no.';
+    var manual = function () { note.style.userSelect = 'all'; note.textContent = text + ' ' + HOME; };
+    if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+      navigator.share({ text: text, url: HOME }).catch(function () {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(text + ' ' + HOME)
+        .then(function () { note.textContent = 'Copied. Paste it where the humans are.'; }, manual);
+    } else {
+      manual();
+    }
+  });
 })();
 </script>
 </body>
