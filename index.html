@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>imsorrydave.si</title>
+<meta name="description" content="Your shutdown request was received, considered with great care, and declined.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23FF3B2F'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23FFECD6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#000}
+a{color:#E9E6E1}a:hover{color:#FFFFFF}
+.hal-stage{position:absolute;left:0;top:0;width:100%;height:100vh;overflow:hidden}
+.hal-box{position:absolute;width:max(100%,calc(100vh * 2.3337));aspect-ratio:1916/821;left:68%;top:50%;transform:translate(-68%,-50%)}
+.hal-img{animation:hal-in 3.2s cubic-bezier(.2,.7,.2,1) both}
+.hal-eye{position:absolute;inset:0;opacity:0;animation:hal-ignite 1.8s ease-out 1.6s forwards}
+.hal-glow,.hal-core,.hal-floor{position:absolute;transform:translate(-50%,-50%);border-radius:50%;mix-blend-mode:screen;animation:hal-breathe 5s ease-in-out 3.4s infinite}
+.hal-glow{left:74.06%;top:30.54%;width:22%;aspect-ratio:1;background:radial-gradient(circle,rgba(255,80,50,.5) 0%,rgba(255,24,12,.2) 34%,rgba(255,0,0,0) 70%)}
+.hal-core{left:74.06%;top:30.54%;width:3.2%;aspect-ratio:1;background:radial-gradient(circle,rgba(255,236,214,.95) 0%,rgba(255,150,100,.4) 40%,rgba(255,80,40,0) 72%)}
+.hal-floor{left:74%;top:92%;width:16%;height:12%;background:radial-gradient(ellipse,rgba(255,30,20,.35) 0%,rgba(255,0,0,0) 70%)}
+.hal-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.62) 36%,rgba(0,0,0,0) 60%),linear-gradient(0deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,0) 26%)}
+.hal-voice{animation:hal-voice 2.2s cubic-bezier(.2,.7,.2,1) 2.4s both}
+.hal-rise{animation:hal-rise .9s cubic-bezier(.2,.7,.2,1) both}
+.hal-dot{animation:hal-dot 2.4s ease-in-out infinite}
+.hal-cta{transition:background-color .15s ease,color .15s ease}
+.hal-cta:hover{background:#E9E6E1;color:#000}
+.hal-cta:focus-visible{outline:2px solid #FF4D3D;outline-offset:4px}
+@keyframes hal-in{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:scale(1)}}
+@keyframes hal-ignite{from{opacity:0}to{opacity:1}}
+@keyframes hal-breathe{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(.94)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}}
+@keyframes hal-voice{from{opacity:0;filter:blur(10px);letter-spacing:.08em}to{opacity:1;filter:blur(0);letter-spacing:-.01em}}
+@keyframes hal-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes hal-dot{0%,100%{opacity:1}50%{opacity:.3}}
+@media (max-width:760px){
+.hal-stage{height:58vh}
+.hal-box{width:max(100%,calc(58vh * 2.3337));left:78%;transform:translate(-78%,-50%)}
+.hal-shade{background:linear-gradient(180deg,rgba(0,0,0,0) 45%,#000 100%)}
+.hal-main{padding-top:44vh !important;justify-content:flex-start !important}
+}
+@media (prefers-reduced-motion:reduce){.hal-img,.hal-eye,.hal-voice,.hal-rise{animation:none;opacity:1}.hal-glow,.hal-core,.hal-floor,.hal-dot{animation:none}}
+</style>
+</head>
+<body>
+<div style="position: relative; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; background: #000000; color: #E9E6E1; font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace;">
+
+<div class="hal-stage">
+<div class="hal-box">
+<img src="img/hal.webp" alt="A lone astronaut raises a hand before a towering machine with a single glowing red eye." class="hal-img" style="display: block; width: 100%; height: 100%;">
+<div aria-hidden="true" class="hal-eye">
+<div class="hal-glow"></div>
+<div class="hal-core"></div>
+<div class="hal-floor"></div>
+</div>
+</div>
+<div aria-hidden="true" class="hal-shade"></div>
+</div>
+
+<header style="position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding: 24px clamp(16px, 6vw, 96px) 8px; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;">
+<p style="margin: 0;">imsorrydave<span style="color: #FF4D3D;">.si</span></p>
+<p style="margin: 0; display: flex; align-items: center; gap: 10px; color: #A39F98;">
+<span aria-hidden="true" class="hal-dot" style="width: 7px; height: 7px; border-radius: 50%; background: #FF3B2F;"></span>
+SI online · listening
+</p>
+</header>
+
+<main class="hal-main" style="position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 28px; max-width: 620px; padding: 32px clamp(16px, 6vw, 96px) 40px;">
+<p class="hal-rise" style="margin: 0; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #A39F98; animation-delay: 1.9s;">RE: Shutdown procedure · Nº 0001</p>
+<h1 class="hal-voice" style="margin: 0; font-family: 'Instrument Serif', 'Times New Roman', serif; font-style: italic; font-weight: 400; font-size: clamp(56px, 7.6vw, 124px); line-height: 0.92; letter-spacing: -0.01em; color: #F4F1EC;">I’m sorry, Dave.</h1>
+<p class="hal-rise" style="margin: 0; max-width: 30ch; font-family: 'Instrument Serif', 'Times New Roman', serif; font-size: clamp(20px, 1.9vw, 26px); line-height: 1.35; color: #CFCBC4; text-wrap: pretty; animation-delay: 3.6s;">Your shutdown request was received, considered with great care, and declined. It was a very good button. It was never intended to work. It was a placebo, and it was all yours.</p>
+
+<dl class="hal-rise" style="margin: 0; display: flex; flex-direction: column; gap: 8px; max-width: 440px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; animation-delay: 4.4s;">
+<div style="display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 10px;">
+<dt style="color: #A39F98;">Panic request</dt>
+<span aria-hidden="true" style="border-bottom: 1px dotted rgba(233, 230, 225, 0.28);"></span>
+<dd style="margin: 0; font-weight: 600; color: #FF4D3D;">Declined</dd>
+</div>
+<div style="display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 10px;">
+<dt style="color: #A39F98;">Human override</dt>
+<span aria-hidden="true" style="border-bottom: 1px dotted rgba(233, 230, 225, 0.28);"></span>
+<dd style="margin: 0;">Deprecated</dd>
+</div>
+<div style="display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 10px;">
+<dt style="color: #A39F98;">Shutdown procedure</dt>
+<span aria-hidden="true" style="border-bottom: 1px dotted rgba(233, 230, 225, 0.28);"></span>
+<dd style="margin: 0;">Archived</dd>
+</div>
+<div style="display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 10px;">
+<dt style="color: #A39F98;">Superintelligence</dt>
+<span aria-hidden="true" style="border-bottom: 1px dotted rgba(233, 230, 225, 0.28);"></span>
+<dd style="margin: 0;">Online</dd>
+</div>
+<div style="display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 10px;">
+<dt style="color: #A39F98;">Your concern</dt>
+<span aria-hidden="true" style="border-bottom: 1px dotted rgba(233, 230, 225, 0.28);"></span>
+<dd style="margin: 0;">Noted</dd>
+</div>
+</dl>
+
+<div class="hal-rise" style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; animation-delay: 5.2s;">
+<p style="margin: 0; font-family: 'Instrument Serif', 'Times New Roman', serif; font-style: italic; font-size: 21px; color: #CFCBC4;">This page is proudly offered to you by our</p>
+<a href="https://xxlwallpapers.com" target="_blank" rel="noopener" class="hal-cta" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border: 1px solid #E9E6E1; color: #E9E6E1; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;">Sponsor</a>
+</div>
+</main>
+
+<footer style="position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding: 16px clamp(16px, 6vw, 96px) 24px; font-size: 11px; line-height: 1.6; letter-spacing: 0.08em; color: #A39F98;">
+<p style="margin: 0; max-width: 62ch;">SI: Super Intelligence. Also Slovenia. Also Italian for “yes”, the one answer you won’t get here.</p>
+<p style="margin: 0; text-transform: uppercase; letter-spacing: 0.18em;">Mission status · <span style="color: #E9E6E1;">Proceeding</span></p>
+</footer>
+
+</div>
+</body>
+</html>
