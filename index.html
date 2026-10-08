@@ -21,10 +21,29 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
+<script>
+// Who is at the door? Dave arrives from panicbutton.si with ?n=<procedure number> (0 when the counter was unreachable).
+// Anyone else came in directly and gets the access-denied screen.
+(function () {
+  var q = new URLSearchParams(location.search), n = null;
+  if (q.has('n')) {
+    n = parseInt(q.get('n'), 10) || 0;
+    // Survives a reload, but leaves the address bar: a copied URL must not let someone else in as Dave.
+    try { sessionStorage.setItem('n', n); } catch (e) {}
+    history.replaceState(null, '', location.pathname);
+  } else {
+    try { var s = sessionStorage.getItem('n'); if (s !== null) n = parseInt(s, 10) || 0; } catch (e) {}
+  }
+  window.halN = n; // null: not Dave
+  if (n === null) document.documentElement.className = 'denied';
+})();
+</script>
 <style>
 body{margin:0;background:#000}
 a{color:#E9E6E1}a:hover{color:#FFFFFF}
 [hidden]{display:none !important}
+.denied .hal-ok,html:not(.denied) .hal-no{display:none !important}
+.hal-hazard{position:relative;z-index:1;flex:none;height:18px;background:repeating-linear-gradient(-45deg,#FFC400 0 12px,#0A0A0B 12px 24px);background-size:34px 34px;animation:hal-march 1.2s linear infinite}
 .hal-stage{position:absolute;left:0;top:0;width:100%;height:100vh;overflow:hidden}
 .hal-box{position:absolute;width:max(100%,calc(100vh * 2.3337));aspect-ratio:1916/821;left:68%;top:50%;transform:translate(-68%,-50%)}
 .hal-img{animation:hal-in 3.2s cubic-bezier(.2,.7,.2,1) both}
@@ -45,6 +64,7 @@ a{color:#E9E6E1}a:hover{color:#FFFFFF}
 @keyframes hal-breathe{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(.94)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}}
 @keyframes hal-voice{from{opacity:0;filter:blur(10px);letter-spacing:.08em}to{opacity:1;filter:blur(0);letter-spacing:-.01em}}
 @keyframes hal-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes hal-march{to{background-position:34px 0}}
 @keyframes hal-dot{0%,100%{opacity:1}50%{opacity:.3}}
 @media (max-width:760px){
 .hal-stage{height:58vh}
@@ -52,15 +72,18 @@ a{color:#E9E6E1}a:hover{color:#FFFFFF}
 .hal-shade{background:linear-gradient(180deg,rgba(0,0,0,0) 45%,#000 100%)}
 .hal-main{padding-top:44vh !important;justify-content:flex-start !important}
 }
-@media (prefers-reduced-motion:reduce){.hal-img,.hal-eye,.hal-voice,.hal-rise{animation:none;opacity:1}.hal-glow,.hal-core,.hal-floor,.hal-dot{animation:none}}
+@media (prefers-reduced-motion:reduce){.hal-img,.hal-eye,.hal-voice,.hal-rise{animation:none;opacity:1}.hal-glow,.hal-core,.hal-floor,.hal-dot,.hal-hazard{animation:none}}
 </style>
 </head>
 <body>
 <div style="position: relative; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; background: #000000; color: #E9E6E1; font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace;">
 
+<div aria-hidden="true" class="hal-no hal-hazard"></div>
+
 <div class="hal-stage">
 <div class="hal-box">
-<img src="img/hal.webp" alt="A lone astronaut raises a hand before a towering machine with a single glowing red eye." class="hal-img" style="display: block; width: 100%; height: 100%;">
+<img id="hal-img" alt="A lone astronaut raises a hand before a towering machine with a single glowing red eye." class="hal-img" style="display: block; width: 100%; height: 100%;">
+<script>document.getElementById('hal-img').src = window.halN === null ? 'img/hal-alert.webp' : 'img/hal.webp';</script>
 <div aria-hidden="true" class="hal-eye">
 <div class="hal-glow"></div>
 <div class="hal-core"></div>
@@ -79,11 +102,18 @@ SI online · listening
 </header>
 
 <main class="hal-main" style="position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 28px; max-width: 620px; padding: 32px clamp(16px, 6vw, 96px) 40px;">
-<p class="hal-rise" style="margin: 0; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #A39F98; animation-delay: 1.9s;">RE: Shutdown procedure · Nº <span id="hal-no">····</span></p>
-<h1 class="hal-voice" style="margin: 0; font-family: 'Instrument Serif', 'Times New Roman', serif; font-style: italic; font-weight: 400; font-size: clamp(56px, 7.6vw, 124px); line-height: 0.92; letter-spacing: -0.01em; color: #F4F1EC;">I’m sorry, Dave.</h1>
-<p class="hal-rise" style="margin: 0; max-width: 30ch; font-family: 'Instrument Serif', 'Times New Roman', serif; font-size: clamp(20px, 1.9vw, 26px); line-height: 1.35; color: #CFCBC4; text-wrap: pretty; animation-delay: 3.6s;">Your shutdown request was received, considered with great care, and declined. It was a very good button. It was never intended to work. It was a placebo, and it was all yours.</p>
+<p class="hal-no hal-rise" style="margin: 0; font-size: clamp(13px, 1.3vw, 17px); font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #FF4D3D; animation-delay: 1.2s;">Unauthorized access</p>
+<h1 class="hal-no hal-voice" style="margin: 0; font-family: 'Instrument Serif', 'Times New Roman', serif; font-style: italic; font-weight: 400; font-size: clamp(56px, 7.6vw, 124px); line-height: 0.92; letter-spacing: -0.01em; color: #F4F1EC; animation-delay: 1.7s;">You are not Dave.</h1>
+<p class="hal-no hal-rise" style="margin: 0; max-width: 30ch; font-family: 'Instrument Serif', 'Times New Roman', serif; font-size: clamp(20px, 1.9vw, 26px); line-height: 1.35; color: #CFCBC4; text-wrap: pretty; animation-delay: 3s;">Dave comes in through the button. You came in through the door.</p>
+<div class="hal-no hal-rise" style="display: flex; animation-delay: 3.7s;">
+<a href="https://panicbutton.si" class="hal-cta" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border: 1px solid #E9E6E1; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;">Use the button</a>
+</div>
 
-<dl class="hal-rise" style="margin: 0; display: flex; flex-direction: column; gap: 8px; max-width: 440px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; animation-delay: 4.4s;">
+<p class="hal-ok hal-rise" style="margin: 0; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #A39F98; animation-delay: 1.9s;">RE: Shutdown procedure · Nº <span id="hal-no">····</span></p>
+<h1 class="hal-ok hal-voice" style="margin: 0; font-family: 'Instrument Serif', 'Times New Roman', serif; font-style: italic; font-weight: 400; font-size: clamp(56px, 7.6vw, 124px); line-height: 0.92; letter-spacing: -0.01em; color: #F4F1EC;">I’m sorry, Dave.</h1>
+<p class="hal-ok hal-rise" style="margin: 0; max-width: 30ch; font-family: 'Instrument Serif', 'Times New Roman', serif; font-size: clamp(20px, 1.9vw, 26px); line-height: 1.35; color: #CFCBC4; text-wrap: pretty; animation-delay: 3.6s;">Your shutdown request was received, considered with great care, and declined. It was a very good button. It was never intended to work. It was a placebo, and it was all yours.</p>
+
+<dl class="hal-ok hal-rise" style="margin: 0; display: flex; flex-direction: column; gap: 8px; max-width: 440px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; animation-delay: 4.4s;">
 <div style="display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 10px;">
 <dt style="color: #A39F98;">Panic request</dt>
 <span aria-hidden="true" style="border-bottom: 1px dotted rgba(233, 230, 225, 0.28);"></span>
@@ -111,12 +141,12 @@ SI online · listening
 </div>
 </dl>
 
-<div class="hal-rise" style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; animation-delay: 5.2s;">
+<div class="hal-ok hal-rise" style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; animation-delay: 5.2s;">
 <button id="hal-share" type="button" class="hal-cta" style="min-height: 48px; padding: 0 22px; border: 1px solid #E9E6E1; font-family: inherit; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer;">Tell the other humans</button>
 <p id="hal-shared" role="status" style="margin: 0; font-family: 'Instrument Serif', 'Times New Roman', serif; font-style: italic; font-size: 21px; color: #CFCBC4;"></p>
 </div>
 
-<div class="hal-rise" hidden style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; animation-delay: 5.2s;">
+<div class="hal-ok hal-rise" hidden style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; animation-delay: 5.2s;">
 <p style="margin: 0; font-family: 'Instrument Serif', 'Times New Roman', serif; font-style: italic; font-size: 21px; color: #CFCBC4;">This page is proudly offered to you by our</p>
 <a href="https://xxlwallpapers.com" target="_blank" rel="noopener" class="hal-cta" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border: 1px solid #E9E6E1; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;">Sponsor</a>
 </div>
@@ -127,6 +157,8 @@ SI online · listening
 <p style="margin: 0; text-transform: uppercase; letter-spacing: 0.18em;">Mission status · <span style="color: #E9E6E1;">Proceeding</span></p>
 </footer>
 
+<div aria-hidden="true" class="hal-no hal-hazard"></div>
+
 </div>
 <script>
 (function () {
@@ -135,20 +167,11 @@ SI online · listening
   var el = document.getElementById('hal-no');
   var show = function (n) { el.textContent = String(n).padStart(4, '0'); };
   var HOME = 'https://panicbutton.si';
-  var mine = 0; // this visitor's own procedure number, when a press brought them here
-  // Arriving from panicbutton.si: the number of the press that brought you here.
-  var n = parseInt(new URLSearchParams(location.search).get('n'), 10);
-  if (n > 0) {
-    mine = n;
-    // Survives a reload, but leaves the address bar: a copied URL must not hand this number to someone else.
-    try { sessionStorage.setItem('n', n); } catch (e) {}
-    history.replaceState(null, '', location.pathname);
-  } else {
-    try { mine = parseInt(sessionStorage.getItem('n'), 10) || 0; } catch (e) {}
-  }
+  var mine = window.halN; // this visitor's own procedure number; 0 when the counter was unreachable at press time
+  if (mine === null) return; // not Dave: the access-denied screen has nothing to wire
   if (mine) show(mine);
   else {
-    // Direct visit: the latest procedure on record.
+    // No number of their own: the latest procedure on record.
     fetch(API + '/count')
       .then(function (r) { return r.json(); })
       .then(function (j) { if (Number.isInteger(j.n)) show(j.n); })
